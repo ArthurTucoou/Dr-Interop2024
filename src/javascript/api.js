@@ -46,34 +46,57 @@ function fetchFromAPI(endpoint) {
 // Fonction pour récupérer la liste des patients depuis l'API FHIR
 function requestPatientList() {
   return new Promise((resolve, reject) => {
-    console.log("test");
-    
-    let localCache = localStorage.getItem("patients");
-    // if (localCache) {
-    //   setTimeout(() => {
-    //     resolve(JSON.parse(localCache));
-    //   }, 1000);
-    // } else {
-      console.log("ouiiii");
-      
-      fetchFromAPI("patient/")
-        .then(json => {
-          console.log(json);
-          
-          json = combinePatientsBundle(json);
-          localStorage.setItem("patients", JSON.stringify(json));
-          resolve(json);
-        })
-        .catch(e => {
-          reject(e);
-        });
-    // }
+    fetchFromAPI("patient/")
+      .then(json => {
+        console.log(json);
+        json = combinePatientsBundle(json);
+        resolve(json);
+      })
+      .catch(e => {
+        reject(e);
+      });
   });
 }
 
+function matchPatientsWithObservations() {
+  return Promise.all([requestPatientList(), requestObservation()])
+    .then(([patientsData, observationsData]) => {
+      console.log(patientsData);
+      console.log(observationsData);
+      
+      
+      // Création d'un index pour les patients par ID
+      const patientsIndex = patientsData.map(patient => patient.id);
+      console.log(patientsIndex);
+      
+      // Ajout des observations aux patients correspondants
+      patientsData.forEach(patient => {
+        patient.observations = observationsData.filter(observation =>
+          observation.subject.reference.split('/')[1] == patient.id
+        );
+      });
+      console.log(patientsData);
+      
+
+      return patientsData;
+    })
+    .catch(e => {
+      console.error(e);
+    });
+}
+
 // Fonction pour récupérer des observations (ou d'autres ressources)
-function requestObservation(id) {
-  return fetchFromAPI(`observation/${id}`);
+function requestObservation() {
+  return new Promise((resolve, reject) => {
+    fetchFromAPI("observation/")
+      .then(json => {
+        console.log(json);
+        resolve(json);
+      })
+      .catch(e => {
+        reject(e);
+      });
+  });
 }
 
 // Fonction pour obtenir la liste des patients
@@ -83,12 +106,12 @@ const getPatientList = async (message) => {
     if (window.$globalPatients) {
       json = window.$globalPatients;
     } else {
-      const hideLoading = message.loading("Please wait, fetching patient data...", 0);
+      const hideLoading = message.loading("Veuillez patienter, nous récupérons les données des patients...", 0);
       try {
-        json = await requestPatientList();
+        json = await matchPatientsWithObservations();
         console.log(json);
-        
-        message.success({ content: "Patient data loaded!", duration: 2 });
+
+        message.success({ content: "Données des patients chargées !", duration: 2 });
       } catch (e) {
         json = []; // Utiliser un tableau vide ou des données locales en cas d'erreur
         message.warn({
@@ -107,14 +130,14 @@ const getPatientList = async (message) => {
 function parseAllPatientData(patients) {
   const tableData = [];
   patients.forEach(elementRaw => {
-    
+
     let patient = new Object();
     patient.name = elementRaw.name?.[0]?.family + " " + elementRaw.name?.[0]?.given?.[0];
     patient.id = elementRaw.id;
     patient.phone = elementRaw.telecom?.[0]?.value;
     patient.language = elementRaw.communication?.[0]?.language?.text;
     patient.maritalStatus = elementRaw.maritalStatus?.text;
-    patient.address = elementRaw.address?.[0]?.line[0];
+    // patient.address = elementRaw.address?.[0]?.line[0];
     patient.city = elementRaw.address?.[0]?.city;
     patient.state = elementRaw.address?.[0]?.state;
     patient.country = elementRaw.address?.[0]?.country;
