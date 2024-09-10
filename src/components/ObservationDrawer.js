@@ -170,6 +170,7 @@ class ObservationDrawer extends React.Component {
         visible={visible}
         width={this.context.isMobile ? "100%" : "60%"}
       >
+      
         {patient && (
           <div key={keyGen()}>
             <Descriptions title="Administratif">
@@ -188,6 +189,9 @@ class ObservationDrawer extends React.Component {
               </Descriptions.Item> */}
             </Descriptions>
             <ViewRawBtn object={patient}></ViewRawBtn>
+            
+            <Recharts/>
+            
             {observations ? (
               observations
             ) : (
@@ -202,7 +206,7 @@ class ObservationDrawer extends React.Component {
           </div>
         )}
 
-        <Recharts/>
+      
 
         <Drawer
           title="Raw FHIR Data"
