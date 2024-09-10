@@ -73,7 +73,7 @@ function doFilter(patients, filter) {
       match.push(isWithIn);
     }
     if (filter.gender) {
-      match.push(data.gender == filter.gender);
+      match.push(data.gender.toLowerCase() == filter.gender.toLowerCase());
     }
     if (filter.phone) {
       match.push(recursiveFind(data.telecom, filter.phone, filter.exactMatch));
