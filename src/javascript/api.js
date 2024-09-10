@@ -1,7 +1,7 @@
 let patientListDemo = require("./patientDemoData.json");
 let observationDemo = require("./observationDemoData.json");
 
-const SERVER_URL = "https://henryz.cc:5001/api/";
+const BASE_URL = "https://fhir.alliance4u.io/api/";
 
 const moment = require("moment");
 
@@ -13,22 +13,27 @@ const getObservationDemo = () => {
   return combinePatientsBundle(observationDemo);
 };
 
+// Fonction pour combiner les bundles si nécessaire
 function combinePatientsBundle(json) {
   let result = [];
-  for (let bundle of json) {
-    result = result.concat(bundle.entry);
+  if (Array.isArray(json.entry)) {
+    result = result.concat(json.entry);
+  } else {
+    result = result.concat(json);
   }
   console.log(result);
   return result;
 }
 
-function requestObservation(id) {
+// Fonction générique pour faire des requêtes API
+function fetchFromAPI(endpoint) {
   return new Promise((resolve, reject) => {
-    fetch(SERVER_URL + "Observation/" + id)
+    fetch(BASE_URL + endpoint)
       .then(async res => {
+        if (!res.ok) {
+          throw new Error(`HTTP error! status: ${res.status}`);
+        }
         let json = await res.json();
-        console.log(json);
-        json = combinePatientsBundle(json);
         resolve(json);
       })
       .catch(e => {
@@ -38,43 +43,54 @@ function requestObservation(id) {
   });
 }
 
+// Fonction pour récupérer la liste des patients depuis l'API FHIR
 function requestPatientList() {
   return new Promise((resolve, reject) => {
+    console.log("test");
+    
     let localCache = localStorage.getItem("patients");
-    if (localCache) {
-      setTimeout(() => {
-        resolve(JSON.parse(localCache));
-      }, 1000);
-    } else {
-      fetch(SERVER_URL + "Patient/")
-        .then(async res => {
-          let json = await res.json();
+    // if (localCache) {
+    //   setTimeout(() => {
+    //     resolve(JSON.parse(localCache));
+    //   }, 1000);
+    // } else {
+      console.log("ouiiii");
+      
+      fetchFromAPI("patient/")
+        .then(json => {
           console.log(json);
+          
           json = combinePatientsBundle(json);
           localStorage.setItem("patients", JSON.stringify(json));
           resolve(json);
         })
         .catch(e => {
           reject(e);
-          console.log(e);
         });
-    }
+    // }
   });
 }
 
-function getPatientList(message) {
+// Fonction pour récupérer des observations (ou d'autres ressources)
+function requestObservation(id) {
+  return fetchFromAPI(`observation/${id}`);
+}
+
+// Fonction pour obtenir la liste des patients
+const getPatientList = async (message) => {
   return new Promise(async resolve => {
     let json = null;
     if (window.$globalPatients) {
       json = window.$globalPatients;
     } else {
-      // start load api, show loading
       const hideLoading = message.loading("Please wait, fetching patient data...", 0);
       try {
         json = await requestPatientList();
+        console.log(json);
+        
         message.success({ content: "Patient data loaded!", duration: 2 });
       } catch (e) {
-        json = getPatientDemo();
+        json = []; // Utiliser un tableau vide ou des données locales en cas d'erreur
         message.warn({
           content: "Network Error, the server might be down. Local demo data is loaded.",
           duration: 5
@@ -85,29 +101,27 @@ function getPatientList(message) {
     }
     resolve(json);
   });
-}
+};
 
+// Fonction pour parser les données des patients
 function parseAllPatientData(patients) {
   const tableData = [];
   patients.forEach(elementRaw => {
-    if (!elementRaw) {
-      return null;
-    }
-    let element = elementRaw.resource;
+    
     let patient = new Object();
-    patient.name = element.name?.[0]?.family + " " + element.name?.[0]?.given?.[0];
-    patient.id = element.id;
-    patient.phone = element.telecom?.[0]?.value;
-    patient.language = element.communication?.[0]?.language?.text;
-    patient.maritalStatus = element.maritalStatus?.text;
-    patient.address = element.address?.[0]?.line[0];
-    patient.city = element.address?.[0]?.city;
-    patient.state = element.address?.[0]?.state;
-    patient.country = element.address?.[0]?.country;
-    patient.gender = element.gender;
-    patient.birthDate = element.birthDate;
-    patient.birthMonth = moment(element.birthDate).format("MMMM");
-    patient.age = moment().diff(element.birthDate, "years");
+    patient.name = elementRaw.name?.[0]?.family + " " + elementRaw.name?.[0]?.given?.[0];
+    patient.id = elementRaw.id;
+    patient.phone = elementRaw.telecom?.[0]?.value;
+    patient.language = elementRaw.communication?.[0]?.language?.text;
+    patient.maritalStatus = elementRaw.maritalStatus?.text;
+    patient.address = elementRaw.address?.[0]?.line[0];
+    patient.city = elementRaw.address?.[0]?.city;
+    patient.state = elementRaw.address?.[0]?.state;
+    patient.country = elementRaw.address?.[0]?.country;
+    patient.gender = elementRaw.gender;
+    patient.birthDate = elementRaw.birthDate;
+    patient.birthMonth = moment(elementRaw.birthDate).format("MMMM");
+    patient.age = moment().diff(elementRaw.birthDate, "years");
     patient.raw = elementRaw;
     tableData.push(patient);
   });
@@ -118,8 +132,7 @@ function parseAllPatientData(patients) {
 export {
   requestPatientList,
   requestObservation,
-  getPatientDemo,
-  getObservationDemo,
+  getPatientList,
   parseAllPatientData,
-  getPatientList
+  getObservationDemo
 };

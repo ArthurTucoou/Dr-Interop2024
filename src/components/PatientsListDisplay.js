@@ -30,6 +30,8 @@ class PatientsListDisplay extends React.Component {
 
   render() {
     let patients = this.props.patients ? this.props.patients : this.state.patientsDummy;
+    console.log(patients);
+    
 
     let layout;
 
@@ -60,7 +62,7 @@ class PatientsListDisplay extends React.Component {
         .map(patient => (
           <Col xs={23} sm={23} md={12} lg={8} style={{ padding: "10px" }} key={keyCounter++}>
             <PatientCard
-              patientData={patient && patient.resource}
+              patientData={patient}
               loading={this.props.loading}
               viewPatient={() => {
                 this.viewPatientDrawer(patient);

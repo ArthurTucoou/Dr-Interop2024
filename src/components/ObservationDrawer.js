@@ -36,8 +36,10 @@ class ObservationDrawer extends React.Component {
   async componentDidUpdate() {
     if (this.props.patient && !this.state.observation) {
       let json;
+      console.log(this.props);
+      
       try {
-        json = await requestObservation(this.props.patient.resource.id);
+        json = await requestObservation(this.props.patient.id);
       } catch (e) {
         json = getObservationDemo();
         message.warn({
@@ -79,7 +81,7 @@ class ObservationDrawer extends React.Component {
 
   render() {
     const { visible } = this.props;
-    const patient = this.props.patient && this.props.patient.resource;
+    const patient = this.props.patient;
 
     // console.log("CONTEXT UPDATE", this.context);
     const ViewRawBtn = props => {
@@ -96,11 +98,15 @@ class ObservationDrawer extends React.Component {
         </div>
       );
     };
-
+    console.log(this.state.observation);
+    
     let observations =
       this.state.observation &&
       this.state.observation.map(entry => {
-        let obs = entry.resource;
+        console.log(entry);
+        
+        let obs = entry.entry[0].resource;
+        console.log(obs);
         let valueKey = findValueKey(obs);
         let valueItems;
         if (valueKey) {
@@ -172,15 +178,15 @@ class ObservationDrawer extends React.Component {
               <Descriptions.Item key={keyGen()} label="ID">
                 {patient.id}
               </Descriptions.Item>
-              <Descriptions.Item key={keyGen()} label="Telephone">
+              {/* <Descriptions.Item key={keyGen()} label="Telephone">
                 {patient.telecom[0].value}
-              </Descriptions.Item>
+              </Descriptions.Item> */}
               <Descriptions.Item key={keyGen()} label="Birth Date">
                 {patient.birthDate}
               </Descriptions.Item>
-              <Descriptions.Item key={keyGen()} label="Address">
+              {/* <Descriptions.Item key={keyGen()} label="Address">
                 {`${patient.address[0].line[0]}, ${patient.address[0].city}, ${patient.address[0].state}, ${patient.address[0].country}`}
-              </Descriptions.Item>
+              </Descriptions.Item> */}
             </Descriptions>
             <ViewRawBtn object={patient}></ViewRawBtn>
             {observations ? (
