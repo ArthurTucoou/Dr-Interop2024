@@ -57,7 +57,7 @@ function recursiveFind(obj, value, exact) {
 function doFilter(patients, filter) {
   let result = [];
   for (let patient of patients) {
-    let data = patient.resource;
+    let data = patient;
     let match = [];
     if (filter.name) {
       match.push(recursiveFind(data.name, filter.name, filter.exactMatch));
