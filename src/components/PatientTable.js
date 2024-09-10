@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import { Table, Skeleton } from "antd";
 import { parseAllPatientData } from "../javascript/api";
+import male from "../img/male.png";
+import female from "../img/female.png";
 
 class PatientTable extends Component {
   constructor(props) {
@@ -48,13 +50,28 @@ class PatientTable extends Component {
 
     const columns = [
       {
-        title: "Name",
+        title: "Nom",
         dataIndex: "name",
         key: "name",
         ellipsis: true,
         width: 180,
         sorter: (a, b) => a.name.localeCompare(b.name),
         fixed: "left"
+      },
+      {
+        title: "Genre",
+        dataIndex: "gender",
+        key: "gender",
+        ellipsis: true,
+        width: 100,
+        sorter: (a, b) => a.gender.localeCompare(b.gender),
+        render: (gender) => (
+          <img 
+            src={gender.toLowerCase() == "male" ? male : female}
+            alt={gender}
+            style={{ width: 20, height: 20, borderRadius: "50%", marginLeft: 10 }}
+          />
+        )
       },
       {
         title: "Observations",
@@ -73,7 +90,7 @@ class PatientTable extends Component {
         fixed: ""
       },
       {
-        title: "ID",
+        title: "INS",
         dataIndex: "id",
         key: "id",
         ellipsis: true,
@@ -81,15 +98,7 @@ class PatientTable extends Component {
         sorter: (a, b) => a.id.localeCompare(b.id)
       },
       {
-        title: "Gender",
-        dataIndex: "gender",
-        key: "gender",
-        ellipsis: true,
-        width: 100,
-        sorter: (a, b) => a.gender.localeCompare(b.gender)
-      },
-      {
-        title: "Brith Date",
+        title: "Date de naissance",
         dataIndex: "birthDate",
         key: "birthDate",
         ellipsis: true,
@@ -103,45 +112,6 @@ class PatientTable extends Component {
         ellipsis: true,
         width: 100,
         sorter: (a, b) => a.age - b.age
-      },
-      {
-        title: "language",
-        dataIndex: "language",
-        key: "language",
-        ellipsis: true,
-        sorter: (a, b) => a.language.localeCompare(b.language)
-      },
-      {
-        title: "Phone",
-        dataIndex: "phone",
-        key: "phone",
-        ellipsis: true,
-        width: 150,
-        sorter: (a, b) => a.phone.localeCompare(b.phone)
-      },
-      {
-        title: "Marital Status",
-        dataIndex: "maritalStatus",
-        key: "maritalStatus",
-        ellipsis: true,
-        width: 150,
-        sorter: (a, b) => a.maritalStatus.localeCompare(b.maritalStatus)
-      },
-      {
-        title: "Address",
-        dataIndex: "address",
-        key: "address",
-        ellipsis: true,
-        width: 300,
-        sorter: (a, b) => a.address.localeCompare(b.address)
-      },
-      {
-        title: "Country",
-        dataIndex: "country",
-        key: "country",
-        ellipsis: true,
-        width: 110,
-        sorter: (a, b) => a.country.localeCompare(b.country)
       }
     ];
 

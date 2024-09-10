@@ -58,6 +58,21 @@ function requestPatientList() {
   });
 }
 
+// Fonction pour récupérer la liste des patients depuis l'API FHIR
+function requestMedecinConnected() {
+  return new Promise((resolve, reject) => {
+    fetchFromAPI("practitioner/1235dr4u54321")
+      .then(json => {
+        console.log(json);
+        // json = combinePatientsBundle(json);
+        resolve(json);
+      })
+      .catch(e => {
+        reject(e);
+      });
+  });
+}
+
 function matchPatientsWithObservations() {
   return Promise.all([requestPatientList(), requestObservation()])
     .then(([patientsData, observationsData]) => {
@@ -163,5 +178,6 @@ export {
   getPatientList,
   parseAllPatientData,
   matchPatientsWithObservations,
-  getObservationDemo
+  getObservationDemo,
+  requestMedecinConnected
 };
