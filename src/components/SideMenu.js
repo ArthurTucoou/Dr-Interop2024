@@ -19,6 +19,7 @@ class SideMenu extends React.Component {
         mode="inline"
         defaultSelectedKeys={["/patients"]}
         selectedKeys={[location.pathname]}
+        className="bg-opacity-30 bg-[#93D5FB]" // Add a custom class using Tailwind
       >
         {/* <Menu.Item key="/">
           <HomeOutlined />
