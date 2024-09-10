@@ -80,11 +80,15 @@ class PatientTable extends Component {
         width: 120,
         render: obj => (
           <a
+          style={{
+            color: "#AD68F3",
+            textDecoration: "underline"
+                      }}
             onClick={() => {
               this.props.viewPatient(obj);
             }}
           >
-            View Detail
+            Voir détails
           </a>
         ),
         fixed: ""

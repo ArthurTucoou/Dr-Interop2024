@@ -185,7 +185,7 @@ const SearchForm = (props) => {
               form.resetFields();
             }}
           >
-            Clear
+            Réinitialiser
           </Button>
         </Col>
       </Row>
