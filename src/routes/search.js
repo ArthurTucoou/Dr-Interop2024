@@ -23,15 +23,15 @@ class SearchPage extends React.Component {
     const isEmpty = Object.values(queryClone).every(x => x === undefined || x === null || x === "");
     if (isEmpty) {
       Modal.warning({
-        title: "Search Failed",
-        content: "At least one field is required to filter results"
-      });
-      return;
-    }
-    if (query.anythingElse) {
-      message.loading(
-        "You have entered the query to search for everything, this might take a while and your browser might freeze, please wait for the browser to respond."
-      );
+        title: "Recherche échouée",
+content: "Au moins un champ est requis pour filtrer les résultats"
+});
+return;
+}
+if (query.anythingElse) {
+  message.loading(
+    "Vous avez saisi une requête pour rechercher tout, cela peut prendre un certain temps et votre navigateur peut figer, veuillez attendre que le navigateur réponde."
+  );
       setTimeout(() => {
         this.setState({ searchContent: query });
       }, 1000);
@@ -45,7 +45,7 @@ class SearchPage extends React.Component {
   render() {
     return (
       <div>
-        <Header title="Advanced Search"></Header>
+        <Header title="Recherche avancée"></Header>
         <SearchForm searchRequest={this.searchPatient}></SearchForm>
         {this.state.searchContent && <PatientPage filter={this.state.searchContent} />}
       </div>
