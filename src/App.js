@@ -219,7 +219,7 @@ const RouterContent = () => {
                 <div className="container">
                   <div className="page">
                     <route.main />
-                    <FhirFooter></FhirFooter>
+                    {/* <FhirFooter></FhirFooter> */}
                   </div>
                 </div>
               }
