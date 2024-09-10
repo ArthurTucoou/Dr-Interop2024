@@ -72,12 +72,10 @@ function matchPatientsWithObservations() {
       // Ajout des observations aux patients correspondants
       patientsData.forEach(patient => {
         patient.observations = observationsData.filter(observation =>
-          observation.subject.reference.split('/')[1] == patient.id
+          observation.subject?.reference?.split('/')[1] == patient.id
         );
       });
-      console.log(patientsData);
       
-
       return patientsData;
     })
     .catch(e => {
@@ -157,5 +155,6 @@ export {
   requestObservation,
   getPatientList,
   parseAllPatientData,
+  matchPatientsWithObservations,
   getObservationDemo
 };

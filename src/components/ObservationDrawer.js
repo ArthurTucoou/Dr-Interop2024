@@ -1,7 +1,7 @@
 import React from "react";
-import { requestObservation, getObservationDemo } from "../javascript/api";
 import { Drawer, Descriptions, Skeleton, message } from "antd";
 import ReactJson from "react-json-view";
+import Recharts from "./Recharts";
 
 import { GlobalContext } from "../components/GlobalContext";
 
@@ -33,29 +33,31 @@ class ObservationDrawer extends React.Component {
 
   static contextType = GlobalContext;
   //load observation
-  async componentDidUpdate() {
-    if (this.props.patient && !this.state.observation) {
-      let json;
-      console.log(this.props);
-      
-      try {
-        json = await requestObservation(this.props.patient.id);
-      } catch (e) {
-        json = getObservationDemo();
-        message.warn({
-          content: "Network Error, the server might be down. Local demo data is loaded.",
-          duration: 2
-        });
-      }
+  // async componentDidUpdate() {
+  //   console.log(this.props.patient);
 
-      this.setState({
-        loading: false,
-        observation: json,
-        rawDataDrawer: false,
-        rawDataDrawerData: null
-      });
-    }
-  }
+  //   if (this.props.patient && this.props.patient.observations.length == 0) {
+  //     let json;
+  //     console.log(this.props);
+
+  //     try {
+  //       json = await requestObservation(this.props.patient.id);
+  //     } catch (e) {
+  //       json = getObservationDemo();
+  //       message.warn({
+  //         content: "Network Error, the server might be down. Local demo data is loaded.",
+  //         duration: 2
+  //       });
+  //     }
+
+  //     this.setState({
+  //       loading: false,
+  //       observation: json,
+  //       rawDataDrawer: false,
+  //       rawDataDrawerData: null
+  //     });
+  //   }
+  // }
 
   onClose = () => {
     this.setState({
@@ -98,15 +100,14 @@ class ObservationDrawer extends React.Component {
         </div>
       );
     };
-    console.log(this.state.observation);
-    
+    console.log(this.props?.patient?.observations);
+
     let observations =
-      this.state.observation &&
-      this.state.observation.map(entry => {
-        console.log(entry);
-        
-        let obs = entry.entry[0].resource;
+      this.props?.patient?.observations &&
+      this.props?.patient?.observations.map(obs => {
         console.log(obs);
+        console.log(findValueKey(obs));
+
         let valueKey = findValueKey(obs);
         let valueItems;
         if (valueKey) {
@@ -141,17 +142,17 @@ class ObservationDrawer extends React.Component {
               column={{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }}
             >
               <Descriptions.Item key={keyGen()} label="ID">
-                {obs.id}
+                {obs?.id}
               </Descriptions.Item>
               {valueItems}
               <Descriptions.Item key={keyGen()} label="Category">
-                {obs.category?.[0]?.coding?.[0].display}
+                {obs?.category?.[0]?.coding?.[0].display}
               </Descriptions.Item>
               <Descriptions.Item key={keyGen()} label="issued">
-                {obs.issued}
+                {obs?.issued}
               </Descriptions.Item>
               <Descriptions.Item key={keyGen()} label="effectiveDateTime">
-                {obs.effectiveDateTime}
+                {obs?.effectivePeriod?.start}
               </Descriptions.Item>
             </Descriptions>
 
@@ -162,7 +163,7 @@ class ObservationDrawer extends React.Component {
 
     return (
       <Drawer
-        title="Patient Observation"
+        title="Synthèse patient"
         placement="right"
         closable={true}
         onClose={this.onClose}
@@ -171,18 +172,16 @@ class ObservationDrawer extends React.Component {
       >
         {patient && (
           <div key={keyGen()}>
-            <Descriptions title="Patient Basic Info">
-              <Descriptions.Item key={keyGen()} label="Name">
-                {`${patient.name[0]?.family} ${patient.name[0]?.given?.[0]} (${patient.name[0]?.prefix?.[0]})`}
+            <Descriptions title="Administratif">
+              <Descriptions.Item key={keyGen()} label="Nom">
+                {`${patient.name[0]?.family} ${patient.name[0]?.given?.[0]}`}
               </Descriptions.Item>
-              <Descriptions.Item key={keyGen()} label="ID">
-                {patient.id}
-              </Descriptions.Item>
-              {/* <Descriptions.Item key={keyGen()} label="Telephone">
-                {patient.telecom[0].value}
-              </Descriptions.Item> */}
-              <Descriptions.Item key={keyGen()} label="Birth Date">
+              <br />
+              <Descriptions.Item key={keyGen()} label="Naissance">
                 {patient.birthDate}
+              </Descriptions.Item>
+              <Descriptions.Item key={keyGen()} label="INS">
+                {patient.id}
               </Descriptions.Item>
               {/* <Descriptions.Item key={keyGen()} label="Address">
                 {`${patient.address[0].line[0]}, ${patient.address[0].city}, ${patient.address[0].state}, ${patient.address[0].country}`}
@@ -202,6 +201,8 @@ class ObservationDrawer extends React.Component {
             )}
           </div>
         )}
+
+        <Recharts/>
 
         <Drawer
           title="Raw FHIR Data"
