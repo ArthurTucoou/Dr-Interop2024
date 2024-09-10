@@ -9579,7 +9579,7 @@
     "tiny-invariant" "^1.0.2"
     "tiny-warning" "^1.0.0"
 
-"react-scripts@3.4.0":
+"react-scripts@^3.4.0":
   "integrity" "sha512-pBqaAroFoHnFAkuX+uSK9Th1uEh2GYdGY2IG1I9/7HmuEf+ls3lLCk1p2GFYRSrLMz6ieQR/SyN6TLIGK3hKRg=="
   "resolved" "https://registry.npmjs.org/react-scripts/-/react-scripts-3.4.0.tgz"
   "version" "3.4.0"
