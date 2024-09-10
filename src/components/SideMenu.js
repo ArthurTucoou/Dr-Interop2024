@@ -4,7 +4,7 @@ import { Menu } from "antd";
 import { BrowserRouter as Router, NavLink, Link } from "react-router-dom";
 import { withRouter } from "react-router-dom";
 
-import { HomeOutlined, TeamOutlined, SearchOutlined, BarChartOutlined } from "@ant-design/icons";
+import { HomeOutlined, TeamOutlined, SearchOutlined, BarChartOutlined, UserOutlined } from "@ant-design/icons";
 
 class SideMenu extends React.Component {
   constructor(props) {
@@ -17,27 +17,34 @@ class SideMenu extends React.Component {
       <Menu
         theme="dark"
         mode="inline"
-        defaultSelectedKeys={["/"]}
+        defaultSelectedKeys={["/patients"]}
         selectedKeys={[location.pathname]}
       >
-        <Menu.Item key="/">
+        {/* <Menu.Item key="/">
           <HomeOutlined />
           <span>Home</span>
           <NavLink to="/" />
-        </Menu.Item>
+        </Menu.Item> */}
         <Menu.Item key="/patients">
           <TeamOutlined />
-          <span>Patient List</span>
+          <span>Acceuil</span>
           <NavLink to="/patients" />
-        </Menu.Item>
-        <Menu.Item key="/search">
-          <SearchOutlined />
-          <span>Search</span>
-          <NavLink to="/search" />
         </Menu.Item>
         <Menu.Item key="/statistics">
           <BarChartOutlined />
-          <span>Statistics</span>
+          <span>Synthèse</span>
+          <NavLink to="/statistics" />
+        </Menu.Item>
+        <Menu.Item key="/search">
+          <SearchOutlined />
+          <span>Recherche</span>
+          <NavLink to="/search" />
+        </Menu.Item>
+        
+        {/* key + nav a changer */}
+        <Menu.Item key="/statistics">
+          <UserOutlined />
+          <span>Profil</span>
           <NavLink to="/statistics" />
         </Menu.Item>
       </Menu>
