@@ -1,34 +1,82 @@
 import React, { useEffect, useState } from "react";
-import { Form, Input, Button, Row, Col, Typography } from "antd";
-import moment from "moment";
+import { Form, Input, Button, Row, Col, Typography, message } from "antd";
 import { useParams } from "react-router-dom";
-import { requestPatient } from "../javascript/api";
+import { requestPatient, requestMedecinConnected, postCarePlan, postMedicationRequest, postObservation } from "../javascript/api";
 
 const { TextArea } = Input;
 const { Title } = Typography;
 
-const PrescriptionPage = ({ context, onFinish }) => {
+const PrescriptionPage = ({ context }) => {
   const { id } = useParams(); // Récupère l'id depuis l'URL
-  console.log(id);
 
   const [form] = Form.useForm();
   const [patient, setPatient] = useState(null);
+  const [medecin, setMedecin] = useState(null);
 
   useEffect(() => {
-    // Fonction pour récupérer les données du patient
-    const fetchPatientData = async () => {
+    const fetchPatientAndMedecin = async () => {
       try {
+        // Récupérer les informations du patient
         const patientData = await requestPatient(id);
-        console.log(patientData);
-
         setPatient(patientData);
+
+        // Récupérer les informations du médecin
+        const medecinData = await requestMedecinConnected();
+        setMedecin(medecinData);
       } catch (error) {
-        console.error('Erreur lors de la récupération des données du patient:', error);
+        console.error("Erreur lors de la récupération des informations", error);
       }
     };
 
-    fetchPatientData();
+    fetchPatientAndMedecin();
   }, [id]);
+
+  // Fonction pour gérer la soumission du formulaire
+  const onFinish = async (values) => {
+    console.log(values);
+
+    try {
+      const { traitements, observations, conduite } = values;
+
+      // Post Observation
+      await postObservation({
+        resourceType: 'Observation',
+        subject: { reference: `Patient/${id}` },
+        code: {
+          coding: [
+            {
+              code: "test"
+            }
+          ]
+        },
+        note: [{
+          text: observations
+        }],
+      });
+
+      // Post Medical Request
+      await postMedicationRequest({
+        resourceType: 'MedicationRequest',
+        subject: { reference: `Patient/${id}` },
+        medication: {},
+        note: [{
+          text: traitements
+        }],
+      });
+
+      // Post Care Plan
+      await postCarePlan({
+        resourceType: 'CarePlan',
+        subject: { reference: `Patient/${id}` },
+        description: conduite,
+      });
+
+      message.success('Prescription enregistrée avec succès !');
+    } catch (error) {
+      message.error('Erreur lors de l\'enregistrement de la prescription');
+      console.error("Erreur lors de l'enregistrement de la prescription", error);
+    }
+  };
 
   return (
     <div style={{ margin: '0 auto', maxWidth: '1200px', padding: '20px' }}>
@@ -49,7 +97,7 @@ const PrescriptionPage = ({ context, onFinish }) => {
           <Col xs={24} sm={24} md={24} lg={24} className="search_inputs" key={1}>
             <Form.Item
               name="traitements"
-              label={<span style={{ fontWeight: "bold", fontSize: "14px" }}>Traitements</span>}
+              label={<span style={{ fontWeight: "bold", fontSize: "14px" }}>Traitements </span>}
             >
               <TextArea rows={4} placeholder="Entrez les traitements..." />
             </Form.Item>
@@ -59,8 +107,19 @@ const PrescriptionPage = ({ context, onFinish }) => {
         <Row gutter={24}>
           <Col xs={24} sm={24} md={24} lg={24} className="search_inputs" key={2}>
             <Form.Item
+              name="conduite"
+              label={<span style={{ fontWeight: "bold", fontSize: "14px" }}>Conduite à tenir </span>}
+            >
+              <TextArea rows={4} placeholder="Entrez la conduite à tenir..." />
+            </Form.Item>
+          </Col>
+        </Row>
+
+        <Row gutter={24}>
+          <Col xs={24} sm={24} md={24} lg={24} className="search_inputs" key={3}>
+            <Form.Item
               name="observations"
-              label={<span style={{ fontWeight: "bold", fontSize: "18px" }}>Observations</span>}
+              label={<span style={{ fontWeight: "bold", fontSize: "14px" }}>Observations </span>}
             >
               <TextArea rows={4} placeholder="Entrez les observations..." />
             </Form.Item>
