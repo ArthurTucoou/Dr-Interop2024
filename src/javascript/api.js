@@ -155,12 +155,6 @@ function parseAllPatientData(patients) {
     patient.name = elementRaw.name?.[0]?.family + " " + elementRaw.name?.[0]?.given?.[0];
     patient.id = elementRaw.id;
     patient.phone = elementRaw.telecom?.[0]?.value;
-    patient.language = elementRaw.communication?.[0]?.language?.text;
-    patient.maritalStatus = elementRaw.maritalStatus?.text;
-    // patient.address = elementRaw.address?.[0]?.line[0];
-    patient.city = elementRaw.address?.[0]?.city;
-    patient.state = elementRaw.address?.[0]?.state;
-    patient.country = elementRaw.address?.[0]?.country;
     patient.gender = elementRaw.gender;
     patient.birthDate = elementRaw.birthDate;
     patient.birthMonth = moment(elementRaw.birthDate).format("MMMM");

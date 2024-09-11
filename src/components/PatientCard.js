@@ -5,6 +5,8 @@ import male from "../img/male.png";
 import female from "../img/female.png";
 import GlycemieBadge from "./GlycemieBadge";
 
+const moment = require("moment");
+
 class PatientCard extends Component {
   constructor(props) {
     super(props);
@@ -18,7 +20,7 @@ class PatientCard extends Component {
   render() {
     const { patientData, loading } = this.props;
 
-    const name = patientData && patientData.name[0].family + " " + patientData.name[0].given[0];    
+    const name = patientData && patientData.name[0].family + " " + patientData.name[0].given[0];
 
     return (
       <Card
@@ -50,6 +52,7 @@ class PatientCard extends Component {
         {patientData && (
           <div>
             {/* <p>{patientData?.birthDate + ", " + patientData?.communication[0]?.language?.text}</p> */}
+            <p>Âge : {moment().diff(patientData.birthDate, "years")}</p>
             <p>INS : {patientData?.id}</p>
             <GlycemieBadge patientData={patientData} isMoyenne={true}/>
             {/* <p>{patientData?.address[0]?.line[0] + ", " + patientData?.address[0]?.country}</p> */}

@@ -174,6 +174,7 @@ class ObservationDrawer extends React.Component {
                 backgroundColor: '#8a2be2',
                 borderColor: '#8a2be2',
                 borderRadius: '5px',
+                marginRight: "1.5rem",
               }}
               onClick={() => this.props.history.push(`/patient/${this.props?.patient?.id}/prescription`)}
             >
