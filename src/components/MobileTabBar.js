@@ -22,7 +22,7 @@ class TabBarMenu extends React.Component {
       <div style={{ position: "fixed", width: "100%", bottom: 0, zIndex: 900 }}>
         <TabBar unselectedTintColor="#949494" tintColor="#33A3F4" barTintColor="white">
           <TabBar.Item
-            title="Home"
+            title="Accueil"
             key="Home"
             icon={<HomeOutlined style={iconNonSelectStyle} />}
             selectedIcon={<HomeOutlined style={iconSelectedStyle} />}
@@ -44,7 +44,7 @@ class TabBarMenu extends React.Component {
           ></TabBar.Item>
 
           <TabBar.Item
-            title="Search"
+            title="Recherche"
             key="Search"
             icon={<SearchOutlined style={iconNonSelectStyle} />}
             selectedIcon={<SearchOutlined style={iconSelectedStyle} />}

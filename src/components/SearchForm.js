@@ -92,8 +92,8 @@ const SearchForm = (props) => {
               className="search_inputs"
               key={6}
             >
-              <Form.Item name={`maritalStatus`} label={`Status marital`}>
-                <Input placeholder="Entrez le status marital du patient" />
+              <Form.Item name={`maritalStatus`} label={`Statut marital`}>
+                <Input placeholder="Entrez le statut marital du patient" />
               </Form.Item>
             </Col>
 

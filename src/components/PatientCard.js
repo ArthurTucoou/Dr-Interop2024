@@ -26,11 +26,6 @@ class PatientCard extends Component {
       <Card
         title={
           <div style={{ display: "flex", alignItems: "center" }}>
-            <img
-              src={patientData ? patientData.photoUrl : "url_placeholder"}
-              alt="patient"
-              style={{ width: 40, height: 40, borderRadius: "50%", marginRight: 10 }}
-            />
             {patientData ? name : "Chargement..."}
             <img 
               src={patientData?.gender.toLowerCase() == "male" ? male : female}
