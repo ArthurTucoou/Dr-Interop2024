@@ -25,6 +25,55 @@ function combinePatientsBundle(json) {
   return result;
 }
 
+// // Fonction pour mettre à jour les informations du médecin
+// function updateMedecin(data,id) {
+//   console.log("data=",data);
+  
+//   console.log("JSON.stringify(data)=",JSON.stringify(data))
+//   return new Promise((resolve, reject) => {
+//     //autre fonction pour pas get
+//     fetchFromAPI("practitioner/"+id, {
+//       method: "PUT", 
+//       headers: {
+//         "Content-Type": "application/json"
+//       },
+//       body: JSON.stringify(data)
+//     })
+//       .then(json => {
+//         resolve(json);
+//       })
+//       .catch(e => {
+//         reject(e);
+//       });
+//   });
+// }
+
+export async function updateMedecin(data,id) {
+  console.log("JSON.stringify(data)=",JSON.stringify(data))
+  try {
+    // Envoyer la requête POST
+    const response = await fetch(BASE_URL + "practitioner/"+ id, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer your-token-here', // Remplacez par votre token si nécessaire
+      },
+      body: JSON.stringify(data), // Convertir les données en JSON
+    });
+
+    // Lire la réponse en JSON
+    const responseData = await response.json();
+
+    // Retourner les données de la réponse
+    return responseData;
+  } catch (error) {
+    // Gérer les erreurs
+    console.error('Erreur lors de l\'enregistrement de l\'observation:', error);
+    throw error; // Rejeter l'erreur pour permettre à l'appelant de la gérer
+  }
+}
+
+
 // Fonction générique pour faire des requêtes API
 function fetchFromAPI(endpoint) {
   return new Promise((resolve, reject) => {
@@ -173,5 +222,6 @@ export {
   parseAllPatientData,
   matchPatientsWithObservations,
   getObservationDemo,
-  requestMedecinConnected
+  requestMedecinConnected,
+  //updateMedecin
 };
