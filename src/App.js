@@ -8,7 +8,7 @@ import NotFoundPage from "./routes/NotFoundPage";
 import HomePage from "./routes/home";
 import SideMenu from "./components/SideMenu";
 import MobileTabBar from "./components/MobileTabBar";
-
+import ProfilPage from "./routes/profil";
 import logo from "./img/fhir-logo-long.png";
 import icon from "./img/icon.png";
 import profile from "./img/profile.png";
@@ -94,7 +94,7 @@ const routes = [
   {
     path: "/profil",
     title: () => "Profil",
-    main: () => <PrescriptionPage />
+    main: () => <ProfilPage />
   },
   {
     path: "/patient/:id/prescription",
