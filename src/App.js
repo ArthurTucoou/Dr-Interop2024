@@ -58,14 +58,15 @@ class DesktopMenu extends React.Component {
           left: 0
         }}
       >
-        <Link to="/">
-          <div
-            className="logo"
-            style={{
-              background: `url("${this.state.collapsed ? icon : logo}") no-repeat`
-            }}
-          ></div>
-        </Link>
+        <Link to="/patients">
+  <div
+    className="logo"
+    style={{
+      background: `url("${this.state.collapsed ? icon : logo}") no-repeat`,
+      transform: 'scale(2)' // Add this line to zoom the logo
+    }}
+  ></div>
+</Link>
         <SideMenu></SideMenu>
         <div style={{ flexGrow: 1 }}></div>
       </Sider>

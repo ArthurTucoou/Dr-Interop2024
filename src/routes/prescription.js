@@ -1,5 +1,5 @@
-import React from 'react';
-import { Form, Input, Button, Row, Col, Tooltip, Checkbox } from 'antd';
+import React from "react";
+import { Form, Input, Button, Row, Col, Tooltip, Checkbox } from "antd";
 
 const PrescriptionPage = ({ context, onFinish }) => {
   const [form] = Form.useForm();
@@ -51,12 +51,19 @@ const PrescriptionPage = ({ context, onFinish }) => {
           lg={8}
           span={8}
           style={{
-            textAlign: context?.isMobile ? 'center' : 'left',
+            textAlign: context?.isMobile ? "center" : "left",
           }}
         >
-          <Form.Item name="exactMatch" valuePropName="checked" style={{ marginBottom: 0 }}>
+          <Form.Item
+            name="exactMatch"
+            valuePropName="checked"
+            style={{ marginBottom: 0 }}
+          >
             <Checkbox>
-              <Tooltip placement={context?.isMobile ? 'top' : 'right'} title="Correspondance exacte">
+              <Tooltip
+                placement={context?.isMobile ? "top" : "right"}
+                title="Correspondance exacte"
+              >
                 Correspondance exacte
               </Tooltip>
             </Checkbox>
@@ -70,15 +77,27 @@ const PrescriptionPage = ({ context, onFinish }) => {
           lg={16}
           span={16}
           style={{
-            textAlign: context?.isMobile ? 'center' : 'right',
+            textAlign: context?.isMobile ? "center" : "right",
           }}
         >
-          <Button type="primary" htmlType="submit">
+          <Button
+            type="primary"
+            htmlType="submit"
+            style={{
+              backgroundColor: "#AD68F3",
+              borderColor: "#AD68F3",
+              color: "#FFFFFF",
+              fontWeight: "bold",
+            }}
+          >
             Modifier le profil
           </Button>
           <Button
             style={{
               marginLeft: 8,
+              borderColor: "#000000",
+              color: "#000000",
+              fontWeight: "bold",
             }}
             onClick={() => form.resetFields()}
           >

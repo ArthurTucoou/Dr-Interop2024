@@ -13,7 +13,7 @@ class PatientsPage extends React.Component {
     this.state = {
       awaitingData: true,
       patients: null,
-      page: 0
+      page: 0,
     };
   }
 
@@ -22,7 +22,7 @@ class PatientsPage extends React.Component {
 
     this.setState({
       awaitingData: false,
-      patients: json
+      patients: json,
     });
   }
 
@@ -31,7 +31,10 @@ class PatientsPage extends React.Component {
     if (this.props.filter && this.state.patients) {
       patientData = doFilter(this.state.patients, this.props.filter);
       if (patientData.length > 0) {
-        message.success({ content: `Found ${patientData.length} matching records`, duration: 3 });
+        message.success({
+          content: `Found ${patientData.length} matching records`,
+          duration: 3,
+        });
       } else {
         message.warn({ content: `No records found`, duration: 3 });
       }
@@ -39,8 +42,15 @@ class PatientsPage extends React.Component {
     return (
       <div>
         <Overlay show={this.state.awaitingData}></Overlay>
-        {!this.props.filter && <Header title="Liste des patients"></Header>}
-        <PatientsListDisplay patients={patientData} loading={this.state.awaitingData} />
+        {!this.props.filter}
+        <div style={{ marginTop: 20 }}>
+          {" "}
+          {/* Add margin top here */}
+          <PatientsListDisplay
+            patients={patientData}
+            loading={this.state.awaitingData}
+          />
+        </div>
       </div>
     );
   }
@@ -57,8 +67,7 @@ function recursiveFind(obj, value, exact) {
 function doFilter(patients, filter) {
   console.log(patients);
   console.log(filter);
-  
-  
+
   let result = [];
   for (let patient of patients) {
     let data = patient;
@@ -79,10 +88,18 @@ function doFilter(patients, filter) {
       match.push(recursiveFind(data.telecom, filter.phone, filter.exactMatch));
     }
     if (filter.address) {
-      match.push(recursiveFind(data.address, filter.address, filter.exactMatch));
+      match.push(
+        recursiveFind(data.address, filter.address, filter.exactMatch)
+      );
     }
     if (filter.maritalStatus) {
-      match.push(recursiveFind(data.maritalStatus, filter.maritalStatus, filter.exactMatch));
+      match.push(
+        recursiveFind(
+          data.maritalStatus,
+          filter.maritalStatus,
+          filter.exactMatch
+        )
+      );
     }
     if (filter.id) {
       match.push(recursiveFind(data.id, filter.id, filter.exactMatch));
@@ -92,7 +109,7 @@ function doFilter(patients, filter) {
     }
 
     // result
-    if (match.every(x => x === true)) {
+    if (match.every((x) => x === true)) {
       result.push(patient);
     }
   }
