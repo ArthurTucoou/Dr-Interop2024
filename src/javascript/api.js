@@ -58,25 +58,47 @@ function requestPatientList() {
   });
 }
 
+// Fonction pour récupérer la liste des patients depuis l'API FHIR
+function requestMedecinConnected() {
+  return new Promise((resolve, reject) => {
+    fetchFromAPI("practitioner/1235dr4u54321")
+      .then(json => {
+        console.log(json);
+        // json = combinePatientsBundle(json);
+        resolve(json);
+      })
+      .catch(e => {
+        reject(e);
+      });
+  });
+}
+
 function matchPatientsWithObservations() {
   return Promise.all([requestPatientList(), requestObservation()])
     .then(([patientsData, observationsData]) => {
       console.log(patientsData);
       console.log(observationsData);
       
-      
+      // Filtrer les observations avec le code "15074-8"
+      const filteredObservations = observationsData.filter(observation =>
+        observation.code?.coding?.some(coding => coding.code == "15074-8")
+      );
+
       // Création d'un index pour les patients par ID
       const patientsIndex = patientsData.map(patient => patient.id);
       console.log(patientsIndex);
       
       // Ajout des observations aux patients correspondants
       patientsData.forEach(patient => {
-        patient.observations = observationsData.filter(observation =>
+        patient.observations = filteredObservations.filter(observation =>
           observation.subject?.reference?.split('/')[1] == patient.id
         );
       });
+
+      // Retourner seulement les patients qui ont des observations avec le code "15074-8"
+      const patientsWithObservations = patientsData.filter(patient => patient.observations.length > 0);
       
-      return patientsData;
+      return patientsWithObservations;
     })
     .catch(e => {
       console.error(e);
@@ -156,5 +178,6 @@ export {
   getPatientList,
   parseAllPatientData,
   matchPatientsWithObservations,
-  getObservationDemo
+  getObservationDemo,
+  requestMedecinConnected
 };

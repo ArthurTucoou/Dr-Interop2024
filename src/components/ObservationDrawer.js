@@ -2,8 +2,14 @@ import React from "react";
 import { Drawer, Descriptions, Skeleton, message } from "antd";
 import ReactJson from "react-json-view";
 import Recharts from "./Recharts";
+import GlycemieBadge from "./GlycemieBadge";
 
 import { GlobalContext } from "../components/GlobalContext";
+import moment from 'moment';
+import 'moment/locale/fr'; // Importer la locale française
+
+// Assurez-vous que moment utilise la locale française
+moment.locale('fr');
 
 const keyGen = () => {
   let r = Math.random()
@@ -107,6 +113,9 @@ class ObservationDrawer extends React.Component {
       this.props?.patient?.observations.map(obs => {
         console.log(obs);
         console.log(findValueKey(obs));
+        const formattedDate = obs?.effectiveDateTime
+          ? moment(obs.effectiveDateTime).format('DD/MM/YYYY HH:mm')
+          : 'N/A';
 
         let valueKey = findValueKey(obs);
         let valueItems;
@@ -139,24 +148,17 @@ class ObservationDrawer extends React.Component {
               layout={this.context.isMobile ? "horizontal" : "vertical"}
               key={keyGen()}
               title={obs.code.text}
-              column={{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }}
+              column={{ xxl: 4, xl: 4, lg: 4, md: 4, sm: 2, xs: 1 }}
             >
               <Descriptions.Item key={keyGen()} label="ID">
                 {obs?.id}
               </Descriptions.Item>
               {valueItems}
-              <Descriptions.Item key={keyGen()} label="Category">
-                {obs?.category?.[0]?.coding?.[0].display}
-              </Descriptions.Item>
-              <Descriptions.Item key={keyGen()} label="issued">
-                {obs?.issued}
-              </Descriptions.Item>
-              <Descriptions.Item key={keyGen()} label="effectiveDateTime">
-                {obs?.effectivePeriod?.start}
+              <Descriptions.Item key={keyGen()} label="Date">
+                {formattedDate}
               </Descriptions.Item>
             </Descriptions>
-
-            <ViewRawBtn object={obs}></ViewRawBtn>
+            <br />
           </div>
         );
       });
@@ -170,7 +172,7 @@ class ObservationDrawer extends React.Component {
         visible={visible}
         width={this.context.isMobile ? "100%" : "60%"}
       >
-      
+
         {patient && (
           <div key={keyGen()}>
             <Descriptions title="Administratif">
@@ -188,10 +190,19 @@ class ObservationDrawer extends React.Component {
                 {`${patient.address[0].line[0]}, ${patient.address[0].city}, ${patient.address[0].state}, ${patient.address[0].country}`}
               </Descriptions.Item> */}
             </Descriptions>
+            <Descriptions title="Données de santé">
+              <Descriptions.Item key={keyGen()} label="Glycémie moyenne">
+                <GlycemieBadge patientData={patient} isMoyenne={true} />
+              </Descriptions.Item>
+              <br />
+              <Descriptions.Item key={keyGen()} label="Glycémie à jeun">
+                <GlycemieBadge patientData={patient} isMoyenne={false} />
+              </Descriptions.Item>
+            </Descriptions>
+            <Recharts observations={this.props?.patient?.observations} />
             <ViewRawBtn object={patient}></ViewRawBtn>
-            
-            <Recharts/>
-            
+            <br />
+
             {observations ? (
               observations
             ) : (
@@ -206,7 +217,7 @@ class ObservationDrawer extends React.Component {
           </div>
         )}
 
-      
+
 
         <Drawer
           title="Raw FHIR Data"

@@ -18,7 +18,7 @@ class PatientCard extends Component {
   render() {
     const { patientData, loading } = this.props;
 
-    const name = patientData && patientData.name[0].family + " " + patientData.name[0].given[0];
+    const name = patientData && patientData.name[0].family + " " + patientData.name[0].given[0];    
 
     return (
       <Card
@@ -51,7 +51,7 @@ class PatientCard extends Component {
           <div>
             {/* <p>{patientData?.birthDate + ", " + patientData?.communication[0]?.language?.text}</p> */}
             <p>INS : {patientData?.id}</p>
-            <GlycemieBadge value="190" />
+            <GlycemieBadge patientData={patientData} isMoyenne={true}/>
             {/* <p>{patientData?.address[0]?.line[0] + ", " + patientData?.address[0]?.country}</p> */}
           </div>
         )}

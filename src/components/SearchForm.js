@@ -113,7 +113,7 @@ const SearchForm = (props) => {
         )}
       </Row>
 
-      <Row>
+      {/* <Row>
         <Col
           xs={24}
           sm={8}
@@ -134,7 +134,7 @@ const SearchForm = (props) => {
                 placement={context.isMobile ? "top" : "right"}
                 title="Match the exact content from the search query"
               >
-                Exact Match
+                Correspondance exacte
               </Tooltip>
             </Checkbox>
           </Form.Item>
@@ -148,8 +148,8 @@ const SearchForm = (props) => {
           style={{
             textAlign: context.isMobile ? "center" : "right",
           }}
-        >
-          <a
+        > */}
+      {/* <a
             style={{
               marginRight: 12,
               fontSize: 12,
@@ -161,8 +161,8 @@ const SearchForm = (props) => {
             }}
           >
             {expand ? <UpOutlined /> : <DownOutlined />} Recherche avancée
-          </a>
-          <Button
+          </a> */}
+      {/* <Button
             type="primary"
             htmlType="submit"
             style={{
@@ -185,7 +185,81 @@ const SearchForm = (props) => {
               form.resetFields();
             }}
           >
-            Clear
+            Réinitialiser
+          </Button> */}
+      {/* </Col> */}
+      {/* </Row> */}
+      <Row justify="space-between" align="middle">
+        <Col xs={24} sm={12} md={6} lg={6} style={{ textAlign: "left" }}>
+          <Form.Item
+            name="exactMatch"
+            valuePropName="checked"
+            style={{ marginBottom: 0 }}
+          >
+            <Checkbox>
+              <Tooltip
+                placement={context?.isMobile ? "top" : "right"}
+                title="Correspondance exacte"
+              >
+                Correspondance exacte
+              </Tooltip>
+            </Checkbox>
+          </Form.Item>
+        </Col>
+        <Col
+          xs={24}
+          sm={12}
+          md={6}
+          lg={6}
+          style={{ textAlign: "right", paddingRight: 24 }}
+        >
+          <a
+            style={{
+              marginRight: 6,
+              fontSize: 12,
+              color: "#000000",
+              fontWeight: "bold",
+            }}
+            onClick={() => {
+              setExpand(!expand);
+            }}
+          >
+            {expand ? <UpOutlined /> : <DownOutlined />} Recherche avancée
+          </a>
+        </Col>
+        <Col
+          xs={24}
+          sm={12}
+          md={6}
+          lg={6}
+          style={{
+            display: "flex",
+            justifyContent: "flex-end",
+            paddingRight: 24,
+          }}
+        >
+          <Button
+            style={{
+              backgroundColor: "#AD68F3",
+              borderColor: "#AD68F3",
+              color: "#FFFFFF",
+              fontWeight: "bold",
+            }}
+            type="primary"
+            htmlType="submit"
+          >
+            Rechercher
+          </Button>
+          <Button
+            style={{
+              marginLeft: 8,
+              borderColor: "#000000",
+              color: "#000000",
+              fontWeight: "bold",
+            }}
+            onClick={() => form.resetFields()}
+          >
+            Réinitialiser
           </Button>
         </Col>
       </Row>
