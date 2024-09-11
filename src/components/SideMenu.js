@@ -28,7 +28,7 @@ class SideMenu extends React.Component {
         </Menu.Item> */}
         <Menu.Item key="/patients">
           <TeamOutlined />
-          <span>Accueil</span>
+          <span>Patients</span>
           <NavLink to="/patients" />
         </Menu.Item>
         <Menu.Item key="/recherche">
