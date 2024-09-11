@@ -32,7 +32,7 @@ const NotFoundPage = props => {
         subTitle="Sorry, the page you visited does not exist."
         extra={
           <Button type="primary" onClick={returnHome}>
-            Back Home
+            Retour à l'accueil
           </Button>
         }
       />

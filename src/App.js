@@ -58,7 +58,7 @@ class DesktopMenu extends React.Component {
           left: 0
         }}
       >
-        <Link to="/patients">
+        <Link to="/">
   <div
     className="logo"
     style={{
@@ -90,6 +90,11 @@ const routes = [
     path: "/search",
     title: () => "Recherche",
     main: () => <SearchPage />
+  },
+  {
+    path: "/profil",
+    title: () => "Profil",
+    main: () => <PrescriptionPage />
   },
   {
     path: "/patient/:id/prescription",

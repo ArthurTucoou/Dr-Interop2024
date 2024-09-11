@@ -55,13 +55,13 @@ class TabBarMenu extends React.Component {
           ></TabBar.Item>
 
           <TabBar.Item
-            title="Statistics"
-            key="Statistics"
+            title="Profil"
+            key="Profil"
             icon={<BarChartOutlined style={iconNonSelectStyle} />}
             selectedIcon={<BarChartOutlined style={iconSelectedStyle} />}
-            selected={location.pathname === "/statistics"}
+            selected={location.pathname === "/profil"}
             onPress={() => {
-              history.push("/statistics");
+              history.push("/profil");
             }}
           ></TabBar.Item>
         </TabBar>

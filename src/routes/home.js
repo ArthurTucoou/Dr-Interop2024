@@ -54,11 +54,11 @@ class HomePage extends React.Component {
           <div
             className="menu_card"
             onClick={() => {
-              history.push("/statistics");
+              history.push("/profil");
             }}
           >
             <img src={icon_stats} alt="user" />
-            <div className="text">Statistics</div>
+            <div className="text">Profil</div>
           </div>
         </div>
       </div>

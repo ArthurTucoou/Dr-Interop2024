@@ -17,7 +17,7 @@ class SideMenu extends React.Component {
       <Menu
         theme="dark"
         mode="inline"
-        defaultSelectedKeys={["/patients"]}
+        defaultSelectedKeys={["/"]}
         selectedKeys={[location.pathname]}
         className="bg-opacity-30 bg-[#93D5FB]" // Add a custom class using Tailwind
       >
@@ -31,11 +31,6 @@ class SideMenu extends React.Component {
           <span>Accueil</span>
           <NavLink to="/patients" />
         </Menu.Item>
-        <Menu.Item key="/statistics">
-          <BarChartOutlined />
-          <span>Synthèse</span>
-          <NavLink to="/statistics" />
-        </Menu.Item>
         <Menu.Item key="/search">
           <SearchOutlined />
           <span>Recherche</span>
@@ -43,10 +38,10 @@ class SideMenu extends React.Component {
         </Menu.Item>
         
         {/* key + nav a changer */}
-        <Menu.Item key="/statistics">
+        <Menu.Item key="/profil">
           <UserOutlined />
           <span>Profil</span>
-          <NavLink to="/statistics" />
+          <NavLink to="/profil" />
         </Menu.Item>
       </Menu>
     );
