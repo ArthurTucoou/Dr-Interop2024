@@ -1,7 +1,7 @@
 import React from 'react';
 import { Form, Input, Button, Row, Col, Tooltip, Checkbox } from 'antd';
 
-const MedecinProfileForm = ({ context, onFinish }) => {
+const PrescriptionPage = ({ context, onFinish }) => {
   const [form] = Form.useForm();
 
   return (
@@ -90,4 +90,4 @@ const MedecinProfileForm = ({ context, onFinish }) => {
   );
 };
 
-export default MedecinProfileForm;
+export default PrescriptionPage;

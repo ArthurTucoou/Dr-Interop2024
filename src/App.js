@@ -3,7 +3,7 @@ import "./App.css";
 import "antd/dist/antd.css";
 import PatientPage from "./routes/patients";
 import SearchPage from "./routes/search";
-import StatisticsPage from "./routes/statistics";
+import PrescriptionPage from "./routes/prescription";
 import NotFoundPage from "./routes/NotFoundPage";
 import HomePage from "./routes/home";
 import SideMenu from "./components/SideMenu";
@@ -77,7 +77,7 @@ const routes = [
   {
     path: "/",
     exact: true,
-    title: () => "FHIR Home",
+    title: () => "Accueil FHIR",
     main: () => <HomePage />
   },
   {
@@ -87,13 +87,13 @@ const routes = [
   },
   {
     path: "/search",
-    title: () => "Search",
+    title: () => "Recherche",
     main: () => <SearchPage />
   },
   {
-    path: "/statistics",
-    title: () => "Statistics",
-    main: () => <StatisticsPage />
+    path: "/patient/:id/prescription",
+    title: () => "Prescription",
+    main: () => <PrescriptionPage />
   },
   {
     title: () => "404 Not Found",

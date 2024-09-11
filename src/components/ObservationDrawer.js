@@ -1,12 +1,12 @@
 import React from "react";
-import { Drawer, Descriptions, Skeleton, message } from "antd";
+import { Drawer, Descriptions, Skeleton, Button } from "antd";
 import ReactJson from "react-json-view";
 import Recharts from "./Recharts";
 import GlycemieBadge from "./GlycemieBadge";
-
 import { GlobalContext } from "../components/GlobalContext";
 import moment from 'moment';
-import 'moment/locale/fr'; // Importer la locale française
+import { withRouter } from "react-router-dom";
+import 'moment/locale/fr';
 
 // Assurez-vous que moment utilise la locale française
 moment.locale('fr');
@@ -165,7 +165,22 @@ class ObservationDrawer extends React.Component {
 
     return (
       <Drawer
-        title="Synthèse patient"
+        title={
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <span>Synthèse patient</span>
+            <Button
+              type="primary"
+              style={{
+                backgroundColor: '#8a2be2',
+                borderColor: '#8a2be2',
+                borderRadius: '5px',
+              }}
+              onClick={() => this.props.history.push(`/patient/${this.props?.patient?.id}/prescription`)}
+            >
+              Créer une prescription
+            </Button>
+          </div>
+        }
         placement="right"
         closable={true}
         onClose={this.onClose}
@@ -233,4 +248,4 @@ class ObservationDrawer extends React.Component {
   }
 }
 
-export default ObservationDrawer;
+export default withRouter(ObservationDrawer);

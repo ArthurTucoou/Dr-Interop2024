@@ -3,6 +3,7 @@ import { Table, Skeleton } from "antd";
 import { parseAllPatientData } from "../javascript/api";
 import male from "../img/male.png";
 import female from "../img/female.png";
+import GlycemieBadge from "./GlycemieBadge";
 
 class PatientTable extends Component {
   constructor(props) {
@@ -63,10 +64,10 @@ class PatientTable extends Component {
         dataIndex: "gender",
         key: "gender",
         ellipsis: true,
-        width: 100,
+        width: 70,
         sorter: (a, b) => a.gender.localeCompare(b.gender),
         render: (gender) => (
-          <img 
+          <img
             src={gender.toLowerCase() == "male" ? male : female}
             alt={gender}
             style={{ width: 20, height: 20, borderRadius: "50%", marginLeft: 10 }}
@@ -77,14 +78,14 @@ class PatientTable extends Component {
         title: "Observations",
         dataIndex: "raw",
         key: "raw",
-        width: 120,
+        width: 100,
         render: obj => (
           <a
             onClick={() => {
               this.props.viewPatient(obj);
             }}
           >
-            View Detail
+            Voir les détails
           </a>
         ),
         fixed: ""
@@ -94,24 +95,30 @@ class PatientTable extends Component {
         dataIndex: "id",
         key: "id",
         ellipsis: true,
-        width: 330,
+        width: 200,
         sorter: (a, b) => a.id.localeCompare(b.id)
-      },
-      {
-        title: "Date de naissance",
-        dataIndex: "birthDate",
-        key: "birthDate",
-        ellipsis: true,
-        width: 150,
-        sorter: (a, b) => a.birthDate.localeCompare(b.birthDate)
       },
       {
         title: "Age",
         dataIndex: "age",
         key: "age",
         ellipsis: true,
-        width: 100,
-        sorter: (a, b) => a.age - b.age
+        width: 70,
+        sorter: (a, b) => a.age - b.age,
+        render: age => `${age} ans`,
+      },
+      {
+        title: "Glycémie",
+        dataIndex: "observations",
+        key: "glycemie",
+        ellipsis: true,
+        width: 70,
+        render: (observations, record) => (
+          <GlycemieBadge
+            patientData={record.raw} // Passez les données du patient à GlycemieBadge
+            isMoyenne={true} // Si vous voulez afficher la moyenne
+          />
+        ),
       }
     ];
 
