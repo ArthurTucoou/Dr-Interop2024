@@ -45,7 +45,7 @@ const PrescriptionPage = ({ context }) => {
         code: {
           coding: [
             {
-              code: "test"
+              code: "code4u"
             }
           ]
         },

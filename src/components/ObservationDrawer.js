@@ -91,7 +91,6 @@ class ObservationDrawer extends React.Component {
     const { visible } = this.props;
     const patient = this.props.patient;
 
-    // console.log("CONTEXT UPDATE", this.context);
     const ViewRawBtn = props => {
       return (
         <div style={{ margin: "auto", textAlign: "center", padding: "10px 0" }}>
@@ -101,7 +100,7 @@ class ObservationDrawer extends React.Component {
             }}
             disabled={this.props.loading}
           >
-            View Raw FHIR Data
+            Voir les données brutes
           </a>
         </div>
       );
