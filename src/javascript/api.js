@@ -25,29 +25,6 @@ function combinePatientsBundle(json) {
   return result;
 }
 
-// // Fonction pour mettre à jour les informations du médecin
-// function updateMedecin(data,id) {
-//   console.log("data=",data);
-  
-//   console.log("JSON.stringify(data)=",JSON.stringify(data))
-//   return new Promise((resolve, reject) => {
-//     //autre fonction pour pas get
-//     fetchFromAPI("practitioner/"+id, {
-//       method: "PUT", 
-//       headers: {
-//         "Content-Type": "application/json"
-//       },
-//       body: JSON.stringify(data)
-//     })
-//       .then(json => {
-//         resolve(json);
-//       })
-//       .catch(e => {
-//         reject(e);
-//       });
-//   });
-// }
-
 export async function updateMedecin(data,id) {
   console.log("JSON.stringify(data)=",JSON.stringify(data))
   try {

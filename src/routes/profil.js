@@ -14,14 +14,13 @@ const ProfilPage = ({ context }) => {
         setLoading(true);
         const medecinData = await requestMedecinConnected();
         setMedecin(medecinData);
-        //TODO1 : stocke le médecinData
-        console.log("idPractitionner", medecinData?.id);
+
         form.setFieldsValue({
           nom: medecinData?.name?.[0]?.family || "",
           prenom: medecinData?.name?.[0]?.given?.[0] || "",
-          rpps: medecinData?.identifier?.[0]?.value || "",
-          adresse: medecinData?.address?.[0]?.text || "",
-          portable: medecinData?.telecom?.[0]?.value || ""
+          rpps: medecinData?.id || "",
+          address: medecinData?.address?.[0]?.city|| "",
+          telecom: medecinData?.telecom?.[0]?.value || ""
         });
       } catch (error) {
         console.error("Erreur lors de la récupération des données du médecin:", error);
@@ -38,7 +37,6 @@ const ProfilPage = ({ context }) => {
       setLoading(true);
       console.log(values);
   
-      // Restructuring the data in the required format
       const formattedData = {
         resourceType: "Practitioner",
         name: [
@@ -47,6 +45,16 @@ const ProfilPage = ({ context }) => {
             given: [values.prenom],
           },
         ],
+        telecom: [
+            {
+                value: values.telecom,
+            }
+        ],
+        address: [
+            {
+                city: values.address,
+            }
+        ]
       };
   
       // Call the API to update the doctor's data
@@ -84,19 +92,19 @@ const ProfilPage = ({ context }) => {
         </Col>
 
         <Col xs={24} sm={24} md={12} lg={8} className="search_inputs" key={3}>
-          <Form.Item name="rpps" label="Numéro RPPS">
-            <Input placeholder="Entrez votre numéro RPPS" />
-          </Form.Item>
-        </Col>
+  <Form.Item name="rpps" label="Numéro RPPS">
+    <Input placeholder="Entrez votre numéro RPPS" disabled={true} />
+  </Form.Item>
+</Col>
 
         <Col xs={24} sm={24} md={12} lg={8} className="search_inputs" key={4}>
-          <Form.Item name="adresse" label="Adresse">
+          <Form.Item name="address" label="Adresse">
             <Input placeholder="Entrez votre adresse" />
           </Form.Item>
         </Col>
 
         <Col xs={24} sm={24} md={12} lg={8} className="search_inputs" key={5}>
-          <Form.Item name="portable" label="Numéro de portable">
+          <Form.Item name="telecom" label="Numéro de portable">
             <Input placeholder="Entrez votre numéro de portable" />
           </Form.Item>
         </Col>
