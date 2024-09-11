@@ -87,7 +87,7 @@ const routes = [
     main: () => <PatientPage />
   },
   {
-    path: "/search",
+    path: "/recherche",
     title: () => "Recherche",
     main: () => <SearchPage />
   },

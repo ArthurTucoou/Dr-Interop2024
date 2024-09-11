@@ -48,9 +48,9 @@ class TabBarMenu extends React.Component {
             key="Search"
             icon={<SearchOutlined style={iconNonSelectStyle} />}
             selectedIcon={<SearchOutlined style={iconSelectedStyle} />}
-            selected={location.pathname === "/search"}
+            selected={location.pathname === "/recherche"}
             onPress={() => {
-              history.push("/search");
+              history.push("/recherche");
             }}
           ></TabBar.Item>
 

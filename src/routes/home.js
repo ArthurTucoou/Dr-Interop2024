@@ -45,7 +45,7 @@ class HomePage extends React.Component {
           <div
             className="menu_card"
             onClick={() => {
-              history.push("/search");
+              history.push("/recherche");
             }}
           >
             <img src={icon_search} alt="user" />

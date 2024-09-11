@@ -59,6 +59,23 @@ function requestPatientList() {
 }
 
 // Fonction pour récupérer la liste des patients depuis l'API FHIR
+function requestPatient(id) {
+  console.log(id);
+  
+  return new Promise((resolve, reject) => {
+    fetchFromAPI(`patient/${id}`)
+      .then(json => {
+        console.log(json);
+        
+        resolve(json);
+      })
+      .catch(e => {
+        reject(e);
+      });
+  });
+}
+
+// Fonction pour récupérer la liste des patients depuis l'API FHIR
 function requestMedecinConnected() {
   return new Promise((resolve, reject) => {
     fetchFromAPI("practitioner/1235dr4u54321")
@@ -173,5 +190,6 @@ export {
   parseAllPatientData,
   matchPatientsWithObservations,
   getObservationDemo,
-  requestMedecinConnected
+  requestMedecinConnected,
+  requestPatient
 };

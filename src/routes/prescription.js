@@ -1,111 +1,109 @@
-import React from "react";
-import { Form, Input, Button, Row, Col, Tooltip, Checkbox } from "antd";
+import React, { useEffect, useState } from "react";
+import { Form, Input, Button, Row, Col, Typography } from "antd";
+import moment from "moment";
+import { useParams } from "react-router-dom";
+import { requestPatient } from "../javascript/api";
+
+const { TextArea } = Input;
+const { Title } = Typography;
 
 const PrescriptionPage = ({ context, onFinish }) => {
+  const { id } = useParams(); // Récupère l'id depuis l'URL
+  console.log(id);
+
   const [form] = Form.useForm();
+  const [patient, setPatient] = useState(null);
+
+  useEffect(() => {
+    // Fonction pour récupérer les données du patient
+    const fetchPatientData = async () => {
+      try {
+        const patientData = await requestPatient(id);
+        console.log(patientData);
+
+        setPatient(patientData);
+      } catch (error) {
+        console.error('Erreur lors de la récupération des données du patient:', error);
+      }
+    };
+
+    fetchPatientData();
+  }, [id]);
 
   return (
-    <Form
-      form={form}
-      name="medecin_profile_form"
-      className="ant-advanced-search-form"
-      onFinish={onFinish}
-    >
-      <Row gutter={24}>
-        <Col xs={24} sm={24} md={12} lg={8} className="search_inputs" key={1}>
-          <Form.Item name="nom" label="Nom">
-            <Input placeholder="Entrez votre nom" />
-          </Form.Item>
-        </Col>
+    <div style={{ margin: '0 auto', maxWidth: '1200px', padding: '20px' }}>
 
-        <Col xs={24} sm={24} md={12} lg={8} className="search_inputs" key={2}>
-          <Form.Item name="prenom" label="Prénom">
-            <Input placeholder="Entrez votre prénom" />
-          </Form.Item>
-        </Col>
+      {/* Formulaire pour la prescription */}
+      <Form
+        form={form}
+        name="prescription_form"
+        className="ant-advanced-search-form"
+        onFinish={onFinish}
+      >
+        <div style={{ marginBottom: '20px', fontSize: "18px" }}>
+          {/* Affichage des informations du patient */}
+          <h2>{patient?.name[0]?.given[0] + " " + patient?.name[0]?.family} (Date de naissance : {patient?.birthDate})</h2>
+          <h3>Informations médicales</h3>
+        </div>
+        <Row gutter={24}>
+          <Col xs={24} sm={24} md={24} lg={24} className="search_inputs" key={1}>
+            <Form.Item
+              name="traitements"
+              label={<span style={{ fontWeight: "bold", fontSize: "14px" }}>Traitements</span>}
+            >
+              <TextArea rows={4} placeholder="Entrez les traitements..." />
+            </Form.Item>
+          </Col>
+        </Row>
 
-        <Col xs={24} sm={24} md={12} lg={8} className="search_inputs" key={3}>
-          <Form.Item name="rpps" label="Numéro RPPS">
-            <Input placeholder="Entrez votre numéro RPPS" />
-          </Form.Item>
-        </Col>
+        <Row gutter={24}>
+          <Col xs={24} sm={24} md={24} lg={24} className="search_inputs" key={2}>
+            <Form.Item
+              name="observations"
+              label={<span style={{ fontWeight: "bold", fontSize: "18px" }}>Observations</span>}
+            >
+              <TextArea rows={4} placeholder="Entrez les observations..." />
+            </Form.Item>
+          </Col>
+        </Row>
 
-        <Col xs={24} sm={24} md={12} lg={8} className="search_inputs" key={4}>
-          <Form.Item name="adresse" label="Adresse">
-            <Input placeholder="Entrez votre adresse" />
-          </Form.Item>
-        </Col>
-
-        <Col xs={24} sm={24} md={12} lg={8} className="search_inputs" key={5}>
-          <Form.Item name="portable" label="Numéro de portable">
-            <Input placeholder="Entrez votre numéro de portable" />
-          </Form.Item>
-        </Col>
-      </Row>
-
-      <Row>
-        <Col
-          xs={24}
-          sm={8}
-          md={8}
-          lg={8}
-          span={8}
-          style={{
-            textAlign: context?.isMobile ? "center" : "left",
-          }}
-        >
-          <Form.Item
-            name="exactMatch"
-            valuePropName="checked"
-            style={{ marginBottom: 0 }}
-          >
-            <Checkbox>
-              <Tooltip
-                placement={context?.isMobile ? "top" : "right"}
-                title="Correspondance exacte"
-              >
-                Correspondance exacte
-              </Tooltip>
-            </Checkbox>
-          </Form.Item>
-        </Col>
-
-        <Col
-          xs={24}
-          sm={16}
-          md={16}
-          lg={16}
-          span={16}
-          style={{
-            textAlign: context?.isMobile ? "center" : "right",
-          }}
-        >
-          <Button
-            type="primary"
-            htmlType="submit"
+        <Row>
+          <Col
+            xs={24}
+            sm={24}
+            md={24}
+            lg={24}
             style={{
-              backgroundColor: "#AD68F3",
-              borderColor: "#AD68F3",
-              color: "#FFFFFF",
-              fontWeight: "bold",
+              textAlign: context?.isMobile ? "center" : "right",
             }}
           >
-            Modifier le profil
-          </Button>
-          <Button
-            style={{
-              marginLeft: 8,
-              borderColor: "#000000",
-              color: "#000000",
-              fontWeight: "bold",
-            }}
-            onClick={() => form.resetFields()}
-          >
-            Réinitialiser
-          </Button>
-        </Col>
-      </Row>
-    </Form>
+            <Button
+              type="primary"
+              htmlType="submit"
+              style={{
+                backgroundColor: "#AD68F3",
+                borderColor: "#AD68F3",
+                color: "#FFFFFF",
+                fontWeight: "bold",
+              }}
+            >
+              Créer la prescription
+            </Button>
+            <Button
+              style={{
+                marginLeft: 8,
+                borderColor: "#000000",
+                color: "#000000",
+                fontWeight: "bold",
+              }}
+              onClick={() => form.resetFields()}
+            >
+              Réinitialiser
+            </Button>
+          </Col>
+        </Row>
+      </Form>
+    </div>
   );
 };
 
